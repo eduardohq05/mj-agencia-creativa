@@ -1,0 +1,1215 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>MJ Agencia Creativa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:ital,wght@0,300..700;1,300..500&display=swap">
+
+<style>
+/* Layout: bandas a todo el ancho que alternan vino y crema; cada banda centra
+   una columna de 1200px. El movimiento entra por JS (.js-anim) para que la
+   pagina siga siendo legible sin scripts y con prefers-reduced-motion. */
+:root{
+  --wine:        #460323;
+  --wine-deep:   #2B0115;
+  --wine-soft:   #5E0C33;
+  --cream:       #F7F1EA;
+  --rose:        #C06A8C;
+  --rose-deep:   #A8456B;
+  --rose-light:  #D98FAB;
+  --blush:       #EAD3DC;
+  --ink:         #2B0115;
+
+  --display: "Bodoni Moda", Didot, "Playfair Display", Georgia, "Times New Roman", serif;
+  --sans: "Jost", Futura, "Century Gothic", "Avenir Next", system-ui, sans-serif;
+
+  --col: 1200px;
+  --gut-l: max(20px, env(safe-area-inset-left, 0px));
+  --gut-r: max(20px, env(safe-area-inset-right, 0px));
+
+  color-scheme: dark;
+}
+
+*,*::before,*::after{ box-sizing:border-box }
+body{
+  margin:0;
+  background: var(--wine);
+  color: var(--blush);
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img{ max-width:100%; display:block }
+a{ color: inherit }
+::selection{ background: var(--rose-deep); color: var(--cream) }
+
+:focus-visible{
+  outline: 2px solid var(--rose-light);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- bandas ---------- */
+.band{ position:relative; overflow:hidden }
+.band--wine{ background: var(--wine); color: var(--blush) }
+.band--deep{ background: var(--wine-deep); color: var(--blush) }
+.band--cream{ background: var(--cream); color: var(--ink) }
+
+.wrap{
+  width:100%;
+  max-width: var(--col);
+  margin-inline: auto;
+  padding-left: var(--gut-l);
+  padding-right: var(--gut-r);
+  padding-block: clamp(72px, 11vw, 140px);
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- tipografia ---------- */
+.eyebrow{
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--rose-light);
+  margin:0;
+}
+.band--cream .eyebrow{ color: var(--rose-deep) }
+
+h2.title{
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: .95;
+  letter-spacing: -.015em;
+  text-wrap: balance;
+  margin: .3em 0 0;
+  color: var(--cream);
+}
+.band--cream h2.title{ color: var(--wine) }
+h2.title em{
+  font-style: italic;
+  font-weight: 400;
+  color: var(--rose-light);
+  display:block;
+}
+.band--cream h2.title em{ color: var(--rose-deep) }
+
+h3.sub{
+  font-family: var(--sans);
+  font-size: .76rem; font-weight:500;
+  letter-spacing: .26em; text-transform: uppercase;
+  color: var(--rose-light);
+  margin: clamp(48px, 7vw, 76px) 0 24px;
+  display:flex; align-items:center; gap:16px;
+}
+h3.sub::after{
+  content:""; flex:1; height:1px;
+  background: currentColor; opacity:.3;
+}
+
+p{ margin: 0 0 1.1em }
+.lead{
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height: 1.72;
+  max-width: 62ch;
+}
+mark{ background:none; color: var(--rose-deep); font-weight:500 }
+.band--wine mark, .band--deep mark{ color: var(--rose-light) }
+
+/* ---------- movimiento ---------- */
+@media (prefers-reduced-motion: no-preference){
+  .js-anim .reveal{
+    opacity:0;
+    transform: translateY(26px);
+  }
+  .js-anim .reveal.in{
+    opacity:1;
+    transform:none;
+    transition: opacity .75s ease var(--d,0s), transform .75s cubic-bezier(.2,.7,.2,1) var(--d,0s);
+  }
+  .rise{ animation: rise .9s cubic-bezier(.2,.7,.2,1) both }
+  @keyframes rise{ from{ opacity:0; transform: translateY(30px) } to{ opacity:1; transform:none } }
+
+  .frame img{ animation: kenburns 26s ease-in-out infinite alternate }
+  @keyframes kenburns{ from{ transform: scale(1) } to{ transform: scale(1.09) } }
+
+  .spark--float{ animation: breathe 7s ease-in-out infinite }
+  @keyframes breathe{
+    0%,100%{ transform: scale(1) rotate(0deg); opacity:.3 }
+    50%    { transform: scale(1.2) rotate(10deg); opacity:.62 }
+  }
+  .marquee-track{ animation: slide 42s linear infinite }
+  @keyframes slide{ from{ transform: translateX(0) } to{ transform: translateX(-50%) } }
+  .marquee:hover .marquee-track{ animation-play-state: paused }
+}
+
+/* barra de progreso de lectura */
+.progress{
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  left:0; right:0;
+  height: 3px;
+  z-index: 70;
+  background: transparent;
+  pointer-events:none;
+}
+.progress i{
+  display:block; height:100%; width:0%;
+  background: linear-gradient(90deg, var(--rose-deep), var(--rose-light));
+  transition: width .12s linear;
+}
+
+/* ---------- destello ---------- */
+.spark{ width:1em; height:1em; fill: currentColor; flex:none }
+.spark--float{ position:absolute; color: var(--rose); opacity:.35; pointer-events:none }
+
+/* ---------- navegacion ---------- */
+.navtoggle{
+  position: fixed;
+  top: calc(18px + env(safe-area-inset-top, 0px));
+  right: calc(18px + env(safe-area-inset-right, 0px));
+  z-index: 60;
+  width: 50px; height: 50px;
+  display:grid; place-content:center; gap:5px;
+  background: rgba(43,1,21,.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(234,211,220,.28);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background .25s ease, border-color .25s ease;
+}
+.navtoggle:hover{ background: var(--rose-deep); border-color: var(--rose-light) }
+.navtoggle span{
+  display:block; width:19px; height:1.5px;
+  background: var(--cream);
+  transition: transform .3s ease, opacity .2s ease;
+}
+.navtoggle[aria-expanded="true"] span:nth-child(1){ transform: translateY(6.5px) rotate(45deg) }
+.navtoggle[aria-expanded="true"] span:nth-child(2){ opacity:0 }
+.navtoggle[aria-expanded="true"] span:nth-child(3){ transform: translateY(-6.5px) rotate(-45deg) }
+
+.menu{
+  position: fixed;
+  top:0; right:0; bottom:0;
+  z-index: 50;
+  width: min(360px, 86vw);
+  background: var(--rose-deep);
+  color: var(--cream);
+  transform: translateX(101%);
+  transition: transform .42s cubic-bezier(.65,.02,.2,1);
+  display:flex; flex-direction:column; justify-content:center;
+  padding-block: calc(90px + env(safe-area-inset-top,0px)) calc(40px + env(safe-area-inset-bottom,0px));
+  padding-left: 34px;
+  padding-right: calc(34px + env(safe-area-inset-right, 0px));
+  box-shadow: -30px 0 70px rgba(43,1,21,.45);
+}
+.menu[data-open="true"]{ transform: translateX(0) }
+.menu a{
+  font-size: 1.02rem; font-weight:300; letter-spacing:.04em;
+  text-decoration:none;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(247,241,234,.2);
+  transition: padding-left .25s ease, color .25s ease;
+  position: relative;
+}
+.menu a:hover{ padding-left: 10px }
+.menu a.active{ padding-left: 10px; font-weight:500 }
+.menu a.active::before{
+  content:""; position:absolute; left:0; top:50%;
+  width:5px; height:5px; margin-top:-2.5px;
+  border-radius:50%; background: var(--cream);
+}
+.menu .menu-foot{
+  margin: 28px 0 0;
+  font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; opacity:.75;
+}
+.scrim{
+  position: fixed; inset:0; z-index:45;
+  background: rgba(43,1,21,.6);
+  opacity:0; visibility:hidden;
+  transition: opacity .35s ease, visibility .35s;
+}
+.scrim[data-open="true"]{ opacity:1; visibility:visible }
+
+/* ---------- hero ---------- */
+.hero .wrap{
+  min-height: clamp(540px, 76vh, 760px);
+  display:grid;
+  grid-template-columns: 1fr;
+  align-content: center;
+  gap: 40px;
+}
+.hero-brand{
+  display:flex; align-items:center; gap:10px; margin:0;
+  font-size:.74rem; letter-spacing:.3em; text-transform:uppercase;
+  color: var(--blush);
+}
+.wordmark{
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(3.4rem, 14.5vw, 10.5rem);
+  line-height: .8;
+  letter-spacing: -.02em;
+  color: var(--cream);
+  margin: 0;
+  position: relative;
+}
+.wordmark span{ display:block }
+.wordmark .year{
+  font-style: italic; font-weight:400;
+  font-size: clamp(1.9rem, 6vw, 4.2rem);
+  color: var(--rose-light);
+  position: absolute;
+  right: clamp(4px, 6vw, 70px);
+  top: 42%;
+}
+.hero-meta{
+  display:flex; flex-wrap:wrap; gap:14px 30px; align-items:center; margin:0;
+  font-size:.82rem; letter-spacing:.14em; text-transform:uppercase;
+  color: var(--rose-light);
+}
+.hero-meta .dot{ opacity:.5 }
+
+@media (min-width: 900px){
+  .hero .wrap{
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
+    column-gap: 56px;
+    align-items:center;
+  }
+  .hero-brand{ grid-column: 1 / -1 }
+  .hero-type{ grid-column: 1 }
+  .hero-art{ grid-column: 2; grid-row: 2 / span 2 }
+  .hero-meta{ grid-column: 1 }
+}
+
+/* ---------- marco de foto ---------- */
+.frame{
+  position: relative;
+  width: min(100%, 340px);
+  margin-inline: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: 999px 999px 18px 18px;
+  overflow: hidden;
+  background: linear-gradient(170deg, var(--wine-soft), var(--wine-deep));
+  border: 1px solid rgba(216,143,171,.45);
+}
+.frame img{ width:100%; height:100%; object-fit:cover }
+.frame::after{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(to top, rgba(43,1,21,.5), transparent 45%);
+  pointer-events:none;
+}
+.frame--square{ border-radius: 18px; aspect-ratio: 4 / 5 }
+
+/* medallon de marca (sin foto) */
+.medallion{
+  position: relative;
+  width: min(100%, 300px);
+  margin-inline: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: 999px 999px 18px 18px;
+  background:
+    radial-gradient(120% 90% at 50% 8%, rgba(216,143,171,.30), transparent 62%),
+    linear-gradient(170deg, var(--wine-soft), var(--wine-deep));
+  border: 1px solid rgba(216,143,171,.4);
+  display:grid; place-content:center; gap:10px; text-align:center;
+  overflow:hidden;
+}
+.medallion .mono{
+  font-family: var(--display); font-weight:700;
+  font-size: clamp(4.5rem, 13vw, 7rem); line-height:1;
+  color: var(--cream); letter-spacing:.02em;
+}
+.medallion .mono-sub{
+  font-size:.7rem; letter-spacing:.3em; text-transform:uppercase;
+  color: var(--rose-light);
+}
+@media (max-width: 899px){
+  .foco-grid > .medallion{ display:none }
+}
+
+/* ---------- cinta de marcas ---------- */
+.marquee{
+  background: var(--rose-deep);
+  color: var(--cream);
+  overflow: hidden;
+  padding-block: 16px;
+  padding-left: var(--gut-l);
+  padding-right: var(--gut-r);
+  border-block: 1px solid rgba(247,241,234,.18);
+}
+.marquee-track{ display:flex; width:max-content }
+.m-item{
+  display:flex; align-items:center; gap:13px;
+  padding-right: 40px;
+  font-family: var(--display);
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.m-logo{
+  flex:none; width:34px; height:34px;
+  border-radius:50%; overflow:hidden;
+  background: var(--cream);
+  border: 1px solid rgba(247,241,234,.5);
+}
+.m-logo img{ width:100%; height:100%; object-fit:cover }
+
+/* ---------- sobre nosotros ---------- */
+.about-grid{
+  display:grid; grid-template-columns:1fr; gap: 44px;
+  margin-top: 40px; align-items:center;
+}
+@media (min-width: 860px){
+  .about-grid{ grid-template-columns: 1.15fr .85fr; gap: 64px }
+}
+
+/* ---------- foco ---------- */
+.foco-grid{
+  display:grid; grid-template-columns:1fr; gap: 34px;
+  margin-top: 54px; align-items:center;
+}
+.foco-list{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-direction:column; gap: 26px;
+}
+.foco-list li{
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 2.3vw, 1.6rem);
+  font-weight:400; line-height:1.3;
+  color: var(--cream);
+  position: relative; padding-left: 34px;
+}
+.foco-list li::before{
+  content:""; position:absolute; left:0; top:.72em;
+  width:22px; height:1px; background: var(--rose);
+}
+.foco-list li small{
+  display:block;
+  font-family: var(--sans);
+  font-size:.8rem; letter-spacing:.16em; text-transform:uppercase;
+  color: var(--rose-light); margin-top:6px;
+}
+@media (min-width: 900px){
+  .foco-grid{ grid-template-columns: 1fr minmax(0,300px) 1fr; gap: 48px }
+  .foco-list--left li{ text-align:right; padding-left:0; padding-right:34px }
+  .foco-list--left li::before{ left:auto; right:0 }
+}
+
+/* ---------- servicios ---------- */
+.svc-grid{ display:grid; grid-template-columns:1fr; gap:30px; margin-top:56px }
+@media (min-width:640px){ .svc-grid{ grid-template-columns: repeat(2,1fr); gap:34px 40px } }
+@media (min-width:1024px){ .svc-grid{ grid-template-columns: repeat(3,1fr) } }
+
+.svc{ display:flex; gap:18px; align-items:flex-start; min-width:0 }
+.svc-icon{
+  flex:none; width:56px; height:56px; border-radius:50%;
+  display:grid; place-content:center;
+  background: var(--wine); color: var(--cream);
+  transition: background .3s ease, transform .3s ease;
+}
+.svc:hover .svc-icon{ background: var(--rose-deep); transform: translateY(-3px) rotate(-6deg) }
+.svc-icon svg{ width:25px; height:25px; stroke:currentColor; fill:none; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round }
+.svc h3{
+  font-family: var(--display); font-size:1.22rem; font-weight:600; line-height:1.25;
+  margin:4px 0 6px; color: var(--wine);
+}
+.svc p{ margin:0; font-size:.94rem; line-height:1.6; color: rgba(43,1,21,.74) }
+
+.estilo{
+  margin-top: clamp(60px, 8vw, 96px);
+  border-top: 1px solid rgba(43,1,21,.16);
+  padding-top: 44px;
+  display:grid; grid-template-columns:1fr; gap:30px;
+}
+@media (min-width:860px){ .estilo{ grid-template-columns: repeat(3,1fr); gap:44px } }
+.estilo .item{ min-width:0 }
+.estilo .num{
+  font-family: var(--display); font-style:italic; font-size:1.5rem;
+  color: var(--rose-deep); display:block; margin-bottom:8px;
+}
+.estilo h3{
+  font-family: var(--display); font-size:1.3rem; font-weight:600;
+  margin:0 0 8px; color: var(--wine); line-height:1.25;
+}
+.estilo p{ margin:0; font-size:.95rem; color: rgba(43,1,21,.74) }
+.estilo-note{
+  margin:42px 0 0; grid-column: 1 / -1;
+  font-family: var(--display); font-style:italic;
+  font-size: clamp(1.3rem, 3vw, 2rem); line-height:1.35;
+  color: var(--wine); text-wrap: balance;
+}
+
+/* ---------- galerias de contenido ---------- */
+.gal{ display:grid; gap:16px; grid-template-columns: repeat(2, 1fr) }
+@media (min-width:760px){
+  .gal--3{ grid-template-columns: repeat(3,1fr) }
+  .gal--4{ grid-template-columns: repeat(4,1fr) }
+}
+.shot{
+  position:relative; margin:0; min-width:0;
+  border-radius: 14px; overflow:hidden;
+  aspect-ratio: 3 / 4;
+  background: var(--wine);
+  border: 1px solid rgba(216,143,171,.25);
+}
+.shot--v{ aspect-ratio: 9 / 16 }
+.shot img{
+  width:100%; height:100%; object-fit:cover;
+  transition: transform .6s cubic-bezier(.2,.7,.2,1), filter .5s ease;
+}
+.shot:hover img{ transform: scale(1.07) }
+.shot figcaption{
+  position:absolute; left:0; right:0; bottom:0;
+  padding: 26px 14px 12px;
+  font-size:.74rem; letter-spacing:.16em; text-transform:uppercase;
+  color: var(--cream);
+  background: linear-gradient(to top, rgba(43,1,21,.88), transparent);
+}
+.shot .play{
+  position:absolute; top:12px; right:12px;
+  width:34px; height:34px; border-radius:50%;
+  display:grid; place-content:center;
+  background: rgba(43,1,21,.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border:1px solid rgba(234,211,220,.4);
+}
+.shot .play svg{ width:13px; height:13px; fill: var(--cream); margin-left:2px }
+.nota{
+  margin: 26px 0 0;
+  font-size:.9rem; color: var(--blush); opacity:.85;
+}
+.nota a{ color: var(--rose-light) }
+
+/* ---------- marcas ---------- */
+.marcas-grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:52px }
+@media (min-width:560px){ .marcas-grid{ grid-template-columns: repeat(2,1fr) } }
+@media (min-width:900px){ .marcas-grid{ grid-template-columns: repeat(3,1fr) } }
+@media (min-width:1200px){ .marcas-grid{ grid-template-columns: repeat(4,1fr) } }
+
+.marca{
+  min-width:0;
+  display:flex; align-items:center; gap:15px;
+  text-decoration:none; color:inherit;
+  border: 1px solid rgba(216,143,171,.3);
+  border-radius: 14px;
+  padding: 18px;
+  background: rgba(94,12,51,.3);
+  transition: border-color .28s ease, background .28s ease, transform .28s ease;
+}
+.marca:hover{ border-color: var(--rose-light); background: rgba(168,69,107,.32); transform: translateY(-3px) }
+.marca-txt{ min-width:0 }
+.marca .nombre{
+  font-family: var(--display); font-size:1.08rem; font-weight:600; line-height:1.25;
+  color: var(--cream); margin:0 0 3px;
+}
+.marca .handle{
+  margin:0; font-size:.8rem; letter-spacing:.06em;
+  color: var(--rose-light); overflow-wrap:anywhere;
+}
+
+/* Disco de logo. Las iniciales van debajo de la imagen: si el logo no carga,
+   la tarjeta sigue teniendo una marca grafica en vez de un hueco. */
+.logo{
+  position:relative; flex:none;
+  width:56px; height:56px;
+  border-radius:50%; overflow:hidden;
+  background: var(--cream);
+  border: 1px solid rgba(216,143,171,.5);
+  display:grid; place-content:center;
+  transition: transform .28s ease, border-color .28s ease;
+}
+.marca:hover .logo{ transform: scale(1.06); border-color: var(--rose-light) }
+.logo i{
+  font-family: var(--display); font-style:normal; font-weight:700;
+  font-size: 1.05rem; color: var(--wine); letter-spacing:.02em;
+}
+.logo img{
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+}
+
+/* ---------- resultados ---------- */
+.res-grid{ display:grid; grid-template-columns:1fr; gap:40px; margin-top:54px }
+@media (min-width:860px){ .res-grid{ grid-template-columns: repeat(3,1fr); gap:48px } }
+.res{ min-width:0; display:flex; flex-direction:column; gap:10px }
+.res .cifra{
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 4.6vw, 3.1rem);
+  font-weight:600; line-height:1.05;
+  color: var(--wine);
+  font-variant-numeric: tabular-nums;
+  text-wrap: balance; margin:0;
+}
+.res .desc{ margin:0; font-size:.98rem; line-height:1.6; color: rgba(43,1,21,.78) }
+.res .fuente{
+  margin:0; font-size:.8rem; letter-spacing:.12em;
+  color: var(--rose-deep); overflow-wrap:anywhere;
+}
+
+/* ---------- proceso ---------- */
+.proc-grid{ display:grid; grid-template-columns:1fr; gap:28px; margin-top:54px }
+@media (min-width:640px){ .proc-grid{ grid-template-columns: repeat(2,1fr); gap:36px 40px } }
+@media (min-width:1024px){ .proc-grid{ grid-template-columns: repeat(4,1fr) } }
+.paso{ min-width:0; border-top: 1px solid rgba(216,143,171,.3); padding-top:20px }
+.paso .n{
+  font-family: var(--display); font-weight:700; font-size:2.4rem; line-height:1;
+  color: var(--rose-light); font-variant-numeric: tabular-nums;
+  display:block; margin-bottom:12px;
+}
+.paso h3{
+  font-family: var(--display); font-size:1.22rem; font-weight:600;
+  margin:0 0 6px; color: var(--cream); line-height:1.25;
+}
+.paso p{ margin:0; font-size:.93rem; color: var(--blush); opacity:.82 }
+.proc-cta{
+  grid-column: 1 / -1; margin:20px 0 0;
+  font-family: var(--display); font-style:italic;
+  font-size: clamp(1.3rem, 3vw, 2rem); line-height:1.35;
+  color: var(--cream); text-wrap: balance;
+}
+
+/* ---------- contacto ---------- */
+.contacto .wrap{ padding-block: clamp(84px, 13vw, 160px) }
+.contact-grid{ display:grid; grid-template-columns:1fr; gap:40px; margin-top:46px }
+@media (min-width:860px){ .contact-grid{ grid-template-columns: 1.1fr .9fr; gap:64px; align-items:end } }
+
+.canal{ display:flex; flex-direction:column; gap:6px; margin-bottom:28px; min-width:0 }
+.canal .etq{ font-size:.72rem; letter-spacing:.26em; text-transform:uppercase; color: var(--rose-light) }
+.canal .val{
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  font-weight:500; color: var(--cream);
+  text-decoration:none; overflow-wrap:anywhere;
+  font-variant-numeric: tabular-nums;
+  transition: color .25s ease;
+}
+a.val:hover{ color: var(--rose-light) }
+.acciones{ display:flex; flex-wrap:wrap; gap:12px; margin-top:34px }
+
+.btn{
+  display:inline-flex; align-items:center; gap:12px;
+  background: var(--cream); color: var(--wine);
+  font-size:.86rem; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
+  text-decoration:none; padding: 17px 30px;
+  border-radius: 999px; border:0; cursor:pointer;
+  transition: background .28s ease, color .28s ease, transform .28s ease, box-shadow .28s ease;
+}
+.btn:hover{
+  background: var(--rose-light); color: var(--wine-deep);
+  transform: translateY(-2px); box-shadow: 0 12px 28px rgba(43,1,21,.45);
+}
+.btn svg{ width:18px; height:18px; fill: currentColor }
+.btn-ghost{
+  background: transparent; color: var(--blush);
+  border: 1px solid rgba(216,143,171,.45);
+  font-size:.74rem; padding: 12px 20px;
+}
+.btn-ghost:hover{ background: rgba(168,69,107,.35); color: var(--cream); box-shadow:none }
+
+.cierre{
+  font-family: var(--display); font-style:italic; font-weight:400;
+  font-size: clamp(1.6rem, 4vw, 2.9rem); line-height:1.26;
+  color: var(--cream); text-wrap: balance; margin:0;
+}
+.cierre b{ font-style:normal; font-weight:600; color: var(--rose-light) }
+
+footer{
+  background: var(--wine-deep);
+  color: rgba(234,211,220,.65);
+  font-size:.76rem; letter-spacing:.14em; text-transform:uppercase;
+}
+footer .wrap{
+  padding-block: 30px;
+  display:flex; flex-wrap:wrap; gap:12px 26px; justify-content:space-between;
+}
+
+html{ scroll-behavior: smooth }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto }
+  *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important }
+}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><i id="progress-bar"></i></div>
+
+<button class="navtoggle" id="navtoggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+  <span></span><span></span><span></span>
+</button>
+<div class="scrim" id="scrim" hidden></div>
+<nav class="menu" id="menu" aria-label="Secciones">
+  <a href="#inicio">Inicio</a>
+  <a href="#nosotros">Sobre nosotros</a>
+  <a href="#foco">Nuestro foco</a>
+  <a href="#servicios">Servicios</a>
+  <a href="#contenidos">Contenidos</a>
+  <a href="#marcas">Marcas</a>
+  <a href="#resultados">Resultados</a>
+  <a href="#proceso">Proceso</a>
+  <a href="#contacto">Hablemos</a>
+  <p class="menu-foot">@mj_creativeagency</p>
+</nav>
+
+<main>
+
+  <section class="band band--wine hero" id="inicio">
+    <svg class="spark spark--float" style="font-size:38px; top:14%; left:6%" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 0C53 32 68 47 100 50 68 53 53 68 50 100 47 68 32 53 0 50 32 47 47 32 50 0Z"/></svg>
+    <svg class="spark spark--float" style="font-size:22px; bottom:18%; right:12%; animation-delay:2.2s" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 0C53 32 68 47 100 50 68 53 53 68 50 100 47 68 32 53 0 50 32 47 47 32 50 0Z"/></svg>
+    <div class="wrap">
+      <p class="hero-brand rise" style="animation-delay:.05s">
+        <svg class="spark" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 0C53 32 68 47 100 50 68 53 53 68 50 100 47 68 32 53 0 50 32 47 47 32 50 0Z"/></svg>
+        MJ Agencia Creativa
+      </p>
+
+      <div class="hero-type">
+        <h1 class="wordmark">
+          <span class="rise" style="animation-delay:.14s">PORTA</span>
+          <span class="rise" style="animation-delay:.24s">FOLIO</span>
+          <span class="year rise" style="animation-delay:.42s">2026</span>
+        </h1>
+      </div>
+
+      <div class="hero-art rise" style="animation-delay:.34s">
+        <div class="frame">
+          <img src="assets/mj/foto-01.jpg" width="668" height="800" alt="Las dos socias de MJ Agencia Creativa con una cámara y un estabilizador de video">
+        </div>
+      </div>
+
+      <p class="hero-meta rise" style="animation-delay:.5s">
+        <span>Community Management</span>
+        <span class="dot">—</span>
+        <span>Acarigua · Araure</span>
+        <span class="dot">—</span>
+        <span>@mj_creativeagency</span>
+      </p>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track">
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-hierros.jpg" width="150" height="150" alt=""></span>Hierros Portuguesa</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-2dopiso.jpg" width="150" height="150" alt=""></span>2do Piso</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-bullsgym.jpg" width="150" height="150" alt=""></span>The Bulls Gym</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-vanessa.jpg" width="150" height="150" alt=""></span>Dra. Vanessa Lacruz</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-santomelao.jpg" width="150" height="150" alt=""></span>Santo Melao</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-galeno.jpg" width="150" height="150" alt=""></span>Laboratorio Galeno</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-jetour.jpg" width="150" height="150" alt=""></span>Jetour Acarigua</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-dsalas.jpg" width="150" height="150" alt=""></span>Automercado Dsalas</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-decohouse.jpg" width="150" height="150" alt=""></span>Deco House</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-papadimas.jpg" width="150" height="150" alt=""></span>Papa Dimas Bar</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-queserito.jpg" width="150" height="150" alt=""></span>Queserito Market</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-elcapitan.jpg" width="150" height="150" alt=""></span>Multiservicios El Capitán</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-beracars.jpg" width="150" height="150" alt=""></span>Bera Cars Acarigua</div>
+      <div class="m-item"><span class="m-logo"><img src="assets/mj/logo-beka.jpg" width="150" height="150" alt=""></span>Beka Pollo Frito</div>
+    </div>
+  </div>
+
+  <section class="band band--cream" id="nosotros">
+    <div class="wrap">
+      <p class="eyebrow reveal">Sobre nosotros</p>
+      <h2 class="title reveal" style="--d:.06s">¿Quiénes<em>somos?</em></h2>
+
+      <div class="about-grid">
+        <div class="reveal" style="--d:.1s">
+          <p class="lead">¡Hola! Somos <mark>MJ Agencia Creativa</mark>, Community Managers especializadas en potenciar marcas a través de redes sociales.</p>
+          <p class="lead">Somos <mark>fan del contenido auténtico, los datos y las tendencias</mark>. Nuestro foco es conectar con la comunidad ideal de cada marca, y hoy acompañamos a marcas de <mark>Acarigua y Araure</mark> en rubros tan distintos como ferretería, gastronomía, salud, automotriz y retail.</p>
+        </div>
+        <div class="reveal" style="--d:.18s">
+          <div class="frame frame--square">
+            <img src="assets/mj/foto-02.jpg" width="450" height="800" loading="lazy" alt="El equipo de MJ Agencia Creativa trabajando en una laptop junto a material impreso de la marca">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--wine" id="foco">
+    <svg class="spark spark--float" style="font-size:26px; top:12%; right:9%" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 0C53 32 68 47 100 50 68 53 53 68 50 100 47 68 32 53 0 50 32 47 47 32 50 0Z"/></svg>
+    <div class="wrap">
+      <p class="eyebrow reveal">Nuestro foco</p>
+      <h2 class="title reveal" style="--d:.06s">Conectar con la<em>comunidad ideal</em></h2>
+
+      <div class="foco-grid">
+        <ul class="foco-list foco-list--left reveal" style="--d:.1s">
+          <li>Community Managers<small>El equipo</small></li>
+          <li>Acarigua · Araure<small>Portuguesa, Venezuela</small></li>
+          <li><span data-count="14">14</span> marcas acompañadas<small>Y contando</small></li>
+        </ul>
+
+        <div class="medallion reveal" style="--d:.16s">
+          <span class="mono">MJ</span>
+          <span class="mono-sub">Desde Portuguesa</span>
+        </div>
+
+        <ul class="foco-list foco-list--right reveal" style="--d:.22s">
+          <li>Contenido auténtico<small>Nada de plantillas</small></li>
+          <li>Datos y tendencias<small>Decisiones con números</small></li>
+          <li>Cercano, detallista y sutil<small>Nuestro estilo fotográfico</small></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--cream" id="servicios">
+    <div class="wrap">
+      <p class="eyebrow reveal">Trabajo como community</p>
+      <h2 class="title reveal" style="--d:.06s">¿Qué podemos<em>lograr juntos?</em></h2>
+
+      <div class="svc-grid">
+        <article class="svc reveal">
+          <div class="svc-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+          <div><h3>Estrategia de redes sociales</h3><p>Definimos qué decir, a quién y con qué objetivo antes de publicar la primera pieza.</p></div>
+        </article>
+
+        <article class="svc reveal" style="--d:.06s">
+          <div class="svc-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 19.5 10 18l9.5-9.5a2.12 2.12 0 0 0-3-3L7 15z"/><path d="M14 7l3 3"/></svg></div>
+          <div><h3>Creación de contenido</h3><p>Fotografía, video y piezas gráficas pensadas para la identidad de cada marca.</p></div>
+        </article>
+
+        <article class="svc reveal" style="--d:.12s">
+          <div class="svc-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h12l-3-3"/><path d="M20 15.5H8l3 3"/></svg></div>
+          <div><h3>Edición y repost de historias</h3><p>Material editado y las historias de tu comunidad compartidas a tiempo, todos los días.</p></div>
+        </article>
+
+        <article class="svc reveal" style="--d:.18s">
+          <div class="svc-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.8A2.3 2.3 0 0 1 5.8 4.5h8.4a2.3 2.3 0 0 1 2.3 2.3v3.6a2.3 2.3 0 0 1-2.3 2.3H8.4L4 16z"/><path d="M8.4 15.2v.9a2.3 2.3 0 0 0 2.3 2.3h4.9l3.9 3.3v-3.3"/></svg></div>
+          <div><h3>Gestión de comunidad</h3><p>Respondemos mensajes y comentarios con la voz de tu marca, no con respuestas automáticas.</p></div>
+        </article>
+
+        <article class="svc reveal" style="--d:.24s">
+          <div class="svc-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16h16"/><path d="M8 17v-5"/><path d="M12.7 17V8.5"/><path d="M17.4 17v-3"/></svg></div>
+          <div><h3>Reportes y análisis mensual</h3><p>Cada mes ves qué funcionó, qué no y qué vamos a cambiar. Con cifras.</p></div>
+        </article>
+
+        <article class="svc reveal" style="--d:.3s">
+          <div class="svc-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.6h3.6L8.2 6h7.6l1.6 2.6H21v10H3z"/><circle cx="12" cy="13.3" r="3.4"/></svg></div>
+          <div><h3>Organización con equipos fotográficos</h3><p>Coordinamos producción, locación y equipo para las sesiones de tu marca.</p></div>
+        </article>
+      </div>
+
+      <div class="estilo">
+        <div class="item reveal">
+          <span class="num">i</span>
+          <h3>Humanizar las marcas</h3>
+          <p>Detrás de cada cuenta hay personas. Eso es lo que hacemos visible.</p>
+        </div>
+        <div class="item reveal" style="--d:.08s">
+          <span class="num">ii</span>
+          <h3>Generar comunidades reales</h3>
+          <p>Seguidores que comentan, preguntan y vuelven. No números inflados.</p>
+        </div>
+        <div class="item reveal" style="--d:.16s">
+          <span class="num">iii</span>
+          <h3>Potenciar la venta sin perder identidad</h3>
+          <p>Vender sin que tu feed se convierta en un catálogo de ofertas.</p>
+        </div>
+        <p class="estilo-note reveal" style="--d:.22s">Enfocadas siempre en lo que se quiere transmitir.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--deep" id="contenidos">
+    <div class="wrap">
+      <p class="eyebrow reveal">Ejemplos de contenido</p>
+      <h2 class="title reveal" style="--d:.06s">Cercano, detallista<em>y sutil</em></h2>
+
+      <h3 class="sub reveal" style="--d:.1s">Fotografía</h3>
+      <div class="gal gal--3">
+        <figure class="shot reveal">
+          <img src="assets/mj/foto-03.jpg" width="533" height="800" loading="lazy" alt="Hamburguesa fotografiada sobre fondo oscuro para una marca de gastronomía">
+          <figcaption>Gastronomía</figcaption>
+        </figure>
+        <figure class="shot reveal" style="--d:.08s">
+          <img src="assets/mj/foto-04.jpg" width="450" height="800" loading="lazy" alt="Asesor de ventas junto a una camioneta en un concesionario">
+          <figcaption>Automotriz</figcaption>
+        </figure>
+        <figure class="shot reveal" style="--d:.16s">
+          <img src="assets/mj/foto-05.jpg" width="450" height="800" loading="lazy" alt="Profesional de la salud retratada en su consultorio">
+          <figcaption>Salud y estética</figcaption>
+        </figure>
+      </div>
+
+      <h3 class="sub reveal">Audiovisual</h3>
+      <div class="gal gal--4">
+        <figure class="shot shot--v reveal">
+          <img src="assets/mj/video-01.jpg" width="720" height="1280" loading="lazy" alt="Fotograma de un reel grabado en el depósito de Hierros Portuguesa">
+          <span class="play"><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg></span>
+          <figcaption>Hierros Portuguesa</figcaption>
+        </figure>
+        <figure class="shot shot--v reveal" style="--d:.07s">
+          <img src="assets/mj/video-02.jpg" width="720" height="1280" loading="lazy" alt="Fotograma de un reel grabado en un local comercial con pared verde">
+          <span class="play"><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg></span>
+          <figcaption>Retail y espacios</figcaption>
+        </figure>
+        <figure class="shot shot--v reveal" style="--d:.14s">
+          <img src="assets/mj/video-03.jpg" width="720" height="1280" loading="lazy" alt="Fotograma de un reel educativo grabado en un consultorio médico">
+          <span class="play"><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg></span>
+          <figcaption>Dra. Vanessa Lacruz</figcaption>
+        </figure>
+        <figure class="shot shot--v reveal" style="--d:.21s">
+          <img src="assets/mj/video-04.jpg" width="720" height="1280" loading="lazy" alt="Fotograma de un reel de preparación de un sándwich">
+          <span class="play"><svg viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg></span>
+          <figcaption>Gastronomía</figcaption>
+        </figure>
+      </div>
+      <p class="nota reveal">Estos son fotogramas de los reels. Los videos completos están publicados en <a href="https://instagram.com/mj_creativeagency" target="_blank" rel="noopener">@mj_creativeagency</a>.</p>
+    </div>
+  </section>
+
+  <section class="band band--wine" id="marcas">
+    <div class="wrap">
+      <p class="eyebrow reveal">Algunas marcas</p>
+      <h2 class="title reveal" style="--d:.06s">Con las que<em>trabajamos</em></h2>
+
+      <div class="marcas-grid">
+        <a class="marca reveal" href="https://instagram.com/hierrosportuguesa" target="_blank" rel="noopener">
+          <span class="logo"><i>HP</i><img src="assets/mj/logo-hierros.jpg" width="150" height="150" loading="lazy" alt="Logo de Hierros Portuguesa"></span>
+          <div class="marca-txt"><p class="nombre">Hierros Portuguesa</p><p class="handle">@hierrosportuguesa</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.04s" href="https://instagram.com/2dopisofood" target="_blank" rel="noopener">
+          <span class="logo"><i>2P</i><img src="assets/mj/logo-2dopiso.jpg" width="150" height="150" loading="lazy" alt="Logo de 2do Piso"></span>
+          <div class="marca-txt"><p class="nombre">2do Piso</p><p class="handle">@2dopisofood</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.08s" href="https://instagram.com/thebullsgym7" target="_blank" rel="noopener">
+          <span class="logo"><i>TB</i><img src="assets/mj/logo-bullsgym.jpg" width="150" height="150" loading="lazy" alt="Logo de The Bulls Gym"></span>
+          <div class="marca-txt"><p class="nombre">The Bulls Gym</p><p class="handle">@thebullsgym7</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.12s" href="https://instagram.com/dra.vanessalacruz" target="_blank" rel="noopener">
+          <span class="logo"><i>VL</i><img src="assets/mj/logo-vanessa.jpg" width="150" height="150" loading="lazy" alt="Logo de Dra. Vanessa Lacruz"></span>
+          <div class="marca-txt"><p class="nombre">Dra. Vanessa Lacruz</p><p class="handle">@dra.vanessalacruz</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.16s" href="https://instagram.com/santomelao.ve" target="_blank" rel="noopener">
+          <span class="logo"><i>SM</i><img src="assets/mj/logo-santomelao.jpg" width="150" height="150" loading="lazy" alt="Logo de Santo Melao"></span>
+          <div class="marca-txt"><p class="nombre">Santo Melao</p><p class="handle">@santomelao.ve</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.2s" href="https://instagram.com/lab.galeno" target="_blank" rel="noopener">
+          <span class="logo"><i>LG</i><img src="assets/mj/logo-galeno.jpg" width="150" height="150" loading="lazy" alt="Logo de Laboratorio Galeno"></span>
+          <div class="marca-txt"><p class="nombre">Laboratorio Galeno</p><p class="handle">@lab.galeno</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.24s" href="https://instagram.com/jetour.acarigua" target="_blank" rel="noopener">
+          <span class="logo"><i>JA</i><img src="assets/mj/logo-jetour.jpg" width="150" height="150" loading="lazy" alt="Logo de Jetour Acarigua"></span>
+          <div class="marca-txt"><p class="nombre">Jetour Acarigua</p><p class="handle">@jetour.acarigua</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.32s" href="https://instagram.com/dsalasautomercados" target="_blank" rel="noopener">
+          <span class="logo"><i>DS</i><img src="assets/mj/logo-dsalas.jpg" width="150" height="150" loading="lazy" alt="Logo de Automercado Dsalas"></span>
+          <div class="marca-txt"><p class="nombre">Automercado Dsalas</p><p class="handle">@dsalasautomercados</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.36s" href="https://instagram.com/deco_houseca" target="_blank" rel="noopener">
+          <span class="logo"><i>DH</i><img src="assets/mj/logo-decohouse.jpg" width="150" height="150" loading="lazy" alt="Logo de Deco House"></span>
+          <div class="marca-txt"><p class="nombre">Deco House</p><p class="handle">@deco_houseca</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.4s" href="https://instagram.com/papadimasbar" target="_blank" rel="noopener">
+          <span class="logo"><i>PD</i><img src="assets/mj/logo-papadimas.jpg" width="150" height="150" loading="lazy" alt="Logo de Papa Dimas Bar"></span>
+          <div class="marca-txt"><p class="nombre">Papa Dimas Bar</p><p class="handle">@papadimasbar</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.44s" href="https://instagram.com/queserito.ve" target="_blank" rel="noopener">
+          <span class="logo"><i>QM</i><img src="assets/mj/logo-queserito.jpg" width="150" height="150" loading="lazy" alt="Logo de Queserito Market"></span>
+          <div class="marca-txt"><p class="nombre">Queserito Market</p><p class="handle">@queserito.ve</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.48s" href="https://instagram.com/multi_servicioselcapitan" target="_blank" rel="noopener">
+          <span class="logo"><i>EC</i><img src="assets/mj/logo-elcapitan.jpg" width="150" height="150" loading="lazy" alt="Logo de Multiservicios El Capitán"></span>
+          <div class="marca-txt"><p class="nombre">Multiservicios El Capitán</p><p class="handle">@multi_servicioselcapitan</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.52s" href="https://instagram.com/beracars_acarigua" target="_blank" rel="noopener">
+          <span class="logo"><i>BC</i><img src="assets/mj/logo-beracars.jpg" width="150" height="150" loading="lazy" alt="Logo de Bera Cars Acarigua"></span>
+          <div class="marca-txt"><p class="nombre">Bera Cars Acarigua</p><p class="handle">@beracars_acarigua</p></div>
+        </a>
+        <a class="marca reveal" style="--d:.56s" href="https://instagram.com/bekapollofrito" target="_blank" rel="noopener">
+          <span class="logo"><i>BK</i><img src="assets/mj/logo-beka.jpg" width="150" height="150" loading="lazy" alt="Logo de Beka Pollo Frito"></span>
+          <div class="marca-txt"><p class="nombre">Beka Pollo Frito</p><p class="handle">@bekapollofrito</p></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--cream" id="resultados">
+    <div class="wrap">
+      <p class="eyebrow reveal">Resultados que importan</p>
+      <h2 class="title reveal" style="--d:.06s">Lo que logramos<em>en redes</em></h2>
+
+      <div class="res-grid">
+        <article class="res reveal" style="--d:.1s">
+          <p class="cifra"><span data-count="70" data-prefix="+" data-suffix="%">+70%</span></p>
+          <p class="desc">de engagement en tres meses.</p>
+          <p class="fuente">@2dopisofood</p>
+        </article>
+        <article class="res reveal" style="--d:.18s">
+          <p class="cifra">Comunidad activa</p>
+          <p class="desc">Más participación y seguidores fidelizados.</p>
+          <p class="fuente">@thebullsgym7</p>
+        </article>
+        <article class="res reveal" style="--d:.26s">
+          <p class="cifra">Más ventas</p>
+          <p class="desc">Aumento de ventas orgánicas, sin pauta.</p>
+          <p class="fuente">@hierrosportuguesa</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--wine" id="proceso">
+    <div class="wrap">
+      <p class="eyebrow reveal">Proceso de trabajo</p>
+      <h2 class="title reveal" style="--d:.06s">Cómo<em>empezamos</em></h2>
+
+      <div class="proc-grid">
+        <article class="paso reveal" style="--d:.1s">
+          <span class="n">1</span>
+          <h3>Reunión inicial</h3>
+          <p>Conversamos sobre tu marca, tu comunidad y hacia dónde quieres llevarla.</p>
+        </article>
+        <article class="paso reveal" style="--d:.18s">
+          <span class="n">2</span>
+          <h3>Envío de propuesta</h3>
+          <p>Te mandamos el plan, los servicios incluidos y las condiciones.</p>
+        </article>
+        <article class="paso reveal" style="--d:.26s">
+          <span class="n">3</span>
+          <h3>Comienzo de trabajo</h3>
+          <p>Arrancamos con la estrategia y el calendario del primer mes.</p>
+        </article>
+        <article class="paso reveal" style="--d:.34s">
+          <span class="n">4</span>
+          <h3>Aplicación de servicios</h3>
+          <p>Producimos, publicamos, gestionamos la comunidad y medimos.</p>
+        </article>
+        <p class="proc-cta reveal" style="--d:.42s">¿Te gustaría delegar tus redes y enfocarte en hacer crecer tu marca?</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--deep contacto" id="contacto">
+    <svg class="spark spark--float" style="font-size:44px; top:16%; left:8%" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 0C53 32 68 47 100 50 68 53 53 68 50 100 47 68 32 53 0 50 32 47 47 32 50 0Z"/></svg>
+    <svg class="spark spark--float" style="font-size:24px; bottom:22%; right:10%; animation-delay:1.6s" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 0C53 32 68 47 100 50 68 53 53 68 50 100 47 68 32 53 0 50 32 47 47 32 50 0Z"/></svg>
+    <div class="wrap">
+      <p class="eyebrow reveal">Hablemos</p>
+      <h2 class="title reveal" style="--d:.06s">Tu marca<em>merece más</em></h2>
+
+      <div class="contact-grid">
+        <div class="reveal" style="--d:.12s">
+          <div class="canal">
+            <span class="etq">WhatsApp</span>
+            <span class="val" id="telefono">0412-5596209</span>
+          </div>
+          <div class="canal">
+            <span class="etq">Instagram</span>
+            <a class="val" href="https://instagram.com/mj_creativeagency" target="_blank" rel="noopener">@mj_creativeagency</a>
+          </div>
+          <div class="acciones">
+            <a class="btn" href="https://wa.me/584125596209?text=Hola%20MJ%2C%20vi%20su%20portafolio%20y%20me%20gustar%C3%ADa%20conversar%20sobre%20las%20redes%20de%20mi%20marca." target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.7 15l-1.2 4.4 4.5-1.2A10 10 0 1 0 12 2m0 2a8 8 0 1 1-4.1 14.9l-.4-.2-2.3.6.6-2.2-.2-.4A8 8 0 0 1 12 4m-3.3 4c-.2 0-.5.1-.7.4-.2.2-.9.9-.9 2.1 0 1.2.9 2.5 1 2.6.2.2 1.8 2.8 4.4 3.8 2.2.9 2.6.7 3.1.6.5 0 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.5-.3-1.7-.8c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a7 7 0 0 1-2-1.3 7.5 7.5 0 0 1-1.4-1.8c-.2-.2 0-.4.1-.5l.4-.5.3-.5v-.5l-.8-1.8c-.2-.4-.4-.4-.5-.4z"/></svg>
+              Escribir por WhatsApp
+            </a>
+            <button class="btn btn-ghost" type="button" id="copiar">Copiar número</button>
+          </div>
+        </div>
+
+        <div class="reveal" style="--d:.2s">
+          <p class="cierre">Tu marca merece una presencia digital que <b>conecte</b>, <b>destaque</b> y <b>trascienda</b>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>MJ Agencia Creativa · Acarigua – Araure</span>
+    <span>Portafolio 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- menu ---- */
+  var toggle = document.getElementById('navtoggle');
+  var menu   = document.getElementById('menu');
+  var scrim  = document.getElementById('scrim');
+
+  function setMenu(open){
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    menu.dataset.open = open ? 'true' : 'false';
+    scrim.hidden = !open;
+    scrim.dataset.open = open ? 'true' : 'false';
+  }
+  setMenu(false);
+
+  toggle.addEventListener('click', function(){
+    setMenu(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+  scrim.addEventListener('click', function(){ setMenu(false); });
+  menu.addEventListener('click', function(e){
+    if (e.target.tagName === 'A') setMenu(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') setMenu(false);
+  });
+
+  /* ---- cinta infinita: duplica el contenido para que el bucle no corte ---- */
+  var track = document.getElementById('marquee-track');
+  if (track) track.innerHTML += track.innerHTML;
+
+  /* ---- si el logo de una marca no carga, quedan sus iniciales ---- */
+  document.querySelectorAll('.logo img, .m-logo img').forEach(function(im){
+    if (im.complete && im.naturalWidth === 0){ im.remove(); return; }
+    im.addEventListener('error', function(){ im.remove(); });
+  });
+
+  /* ---- barra de progreso ---- */
+  var bar = document.getElementById('progress-bar');
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var p = h > 0 ? (window.pageYOffset / h) * 100 : 0;
+      bar.style.width = Math.min(100, Math.max(0, p)) + '%';
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---- revelados al entrar en pantalla ----
+     Medimos con getBoundingClientRect en vez de IntersectionObserver: si el
+     observer no alcanza a dispararse (capturas estaticas, vistas previas,
+     miniaturas) el contenido se quedaria invisible para siempre. */
+  if (!reduce) {
+    document.documentElement.classList.add('js-anim');
+    var pend = [].slice.call(document.querySelectorAll('.reveal'));
+    var tick3 = false;
+
+    function revisar(){
+      var alto = window.innerHeight || 0;
+      pend = pend.filter(function(el){
+        var r = el.getBoundingClientRect();
+        if (r.top < alto * 0.92 && r.bottom > 0){ el.classList.add('in'); return false; }
+        return true;
+      });
+      if (!pend.length){
+        window.removeEventListener('scroll', alScroll);
+        window.removeEventListener('resize', alScroll);
+      }
+    }
+    function alScroll(){
+      if (tick3) return;
+      tick3 = true;
+      requestAnimationFrame(function(){ revisar(); tick3 = false; });
+    }
+
+    window.addEventListener('scroll', alScroll, { passive: true });
+    window.addEventListener('resize', alScroll);
+    window.addEventListener('load', revisar);
+    requestAnimationFrame(function(){ requestAnimationFrame(revisar); });
+  }
+
+  /* ---- conteo de cifras ---- */
+  function countUp(el){
+    var end = parseInt(el.getAttribute('data-count'), 10);
+    if (isNaN(end)) return;
+    var pre = el.getAttribute('data-prefix') || '';
+    var suf = el.getAttribute('data-suffix') || '';
+    var dur = 1100, t0 = null;
+    function step(t){
+      if (t0 === null) t0 = t;
+      var k = Math.min(1, (t - t0) / dur);
+      var eased = 1 - Math.pow(1 - k, 3);
+      el.textContent = pre + Math.round(end * eased) + suf;
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var counters = document.querySelectorAll('[data-count]');
+  if (!reduce && counters.length && 'IntersectionObserver' in window) {
+    var io2 = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ countUp(en.target); io2.unobserve(en.target); }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function(el){ io2.observe(el); });
+  }
+
+  /* ---- seccion activa en el menu ---- */
+  var links = {};
+  menu.querySelectorAll('a[href^="#"]').forEach(function(a){
+    links[a.getAttribute('href').slice(1)] = a;
+  });
+  if ('IntersectionObserver' in window) {
+    var io3 = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var a = links[en.target.id];
+        if (!a) return;
+        if (en.isIntersecting){
+          Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+          a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    document.querySelectorAll('main section[id]').forEach(function(s){ io3.observe(s); });
+  }
+
+  /* ---- parallax suave de los destellos ---- */
+  if (!reduce) {
+    var sparks = document.querySelectorAll('.spark--float');
+    var tick2 = false;
+    window.addEventListener('scroll', function(){
+      if (tick2) return;
+      tick2 = true;
+      requestAnimationFrame(function(){
+        var y = window.pageYOffset;
+        sparks.forEach(function(s, i){
+          s.style.translate = '0 ' + (y * (i % 2 ? -0.03 : 0.045)).toFixed(1) + 'px';
+        });
+        tick2 = false;
+      });
+    }, { passive: true });
+  }
+
+  /* ---- copiar numero ---- */
+  var copiar = document.getElementById('copiar');
+  var tel = document.getElementById('telefono');
+
+  function seleccionar(){
+    try{
+      var r = document.createRange();
+      r.selectNodeContents(tel);
+      var s = window.getSelection();
+      s.removeAllRanges();
+      s.addRange(r);
+    }catch(e){}
+    copiar.textContent = 'Selecciona y copia';
+    setTimeout(function(){ copiar.textContent = 'Copiar número'; }, 2600);
+  }
+
+  copiar.addEventListener('click', function(){
+    var texto = tel.textContent.trim();
+    try{
+      navigator.clipboard.writeText(texto).then(function(){
+        copiar.textContent = 'Número copiado';
+        setTimeout(function(){ copiar.textContent = 'Copiar número'; }, 2200);
+      }, seleccionar);
+    }catch(err){ seleccionar(); }
+  });
+})();
+</script>
+</body>
+</html>
